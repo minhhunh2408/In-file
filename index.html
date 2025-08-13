@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Đề Nghị Yêu Cầu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', serif;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #000;
+            background: #f5f5f5;
+            padding: 10px;
+        }
+
+        /* Container A4 chính xác */
+        .a4-page {
+            width: 210mm;
+            height: 297mm;
+            margin: 0 auto;
+            background: white;
+            padding: 20mm;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Header công ty */
+        .company-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .company-name {
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .company-address {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* Tiêu đề chính */
+        .main-title {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+
+        .main-title h1 {
+            font-size: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .main-title h2 {
+            font-size: 14px;
+            font-style: italic;
+            color: #333;
+        }
+
+        /* Số phiếu */
+        .form-number {
+            position: absolute;
+            top: 20mm;
+            right: 20mm;
+            text-align: right;
+            font-size: 12px;
+        }
+
+        .form-number .number {
+            font-weight: bold;
+            font-size: 14px;
+            color: #c0392b;
+        }
+
+        /* Thông tin form */
+        .form-section {
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #000;
+            border-left: 4px solid #3498db;
+            padding-left: 8px;
+            background: #ecf0f1;
+            padding: 5px 8px;
+        }
+
+        /* Grid thông tin */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-field {
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 10px;
+        }
+
+        .field-label {
+            font-weight: bold;
+            min-width: 120px;
+            margin-right: 10px;
+        }
+
+        .field-value {
+            flex: 1;
+            border-bottom: 1px dotted #666;
+            min-height: 20px;
+            padding: 0 5px;
+        }
+
+        /* Full width fields */
+        .full-width-field {
+            grid-column: 1 / -1;
+        }
+
+        /* Text areas */
+        .text-area {
+            border: 1px solid #666;
+            padding: 10px;
+            background: #fafafa;
+            font-family: 'Times New Roman', serif;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .description-area {
+            min-height: 60mm;
+        }
+
+        .solution-area {
+            min-height: 45mm;
+        }
+
+        /* Bảng thông số kỹ thuật */
+        .tech-specs {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            font-size: 13px;
+        }
+
+        .tech-specs th,
+        .tech-specs td {
+            border: 1px solid #666;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .tech-specs th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+
+        /* Approval section */
+        .approval-section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+        }
+
+        .approval-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+            margin-top: 15px;
+        }
+
+        .approval-box {
+            text-align: center;
+            padding: 10px;
+            border: 1px dashed #999;
+            background: #fefefe;
+        }
+
+        .approval-title {
+            font-weight: bold;
+            margin-bottom: 40px;
+            font-size: 13px;
+        }
+
+        .signature-line {
+            border-bottom: 1px solid #000;
+            margin-bottom: 5px;
+            height: 1px;
+        }
+
+        .approval-note {
+            font-size: 11px;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .control-btn {
+            padding: 8px 15px;
+            margin: 0 3px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-print {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-print:hover {
+            background: #0056b3;
+        }
+
+        .btn-pdf {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-pdf:hover {
+            background: #1e7e34;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .controls {
+                display: none;
+            }
+
+            .a4-page {
+                width: 100%;
+                height: 100vh;
+                margin: 0;
+                padding: 15mm;
+                box-shadow: none;
+            }
+
+            @page {
+                size: A4 portrait;
+                margin: 0;
+            }
+
+            .form-section {
+                page-break-inside: avoid;
+            }
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 768px) {
+            .a4-page {
+                width: 100%;
+                height: auto;
+                padding: 15px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .approval-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .controls {
+                position: static;
+                margin-bottom: 15px;
+                text-align: center;
+            }
+        }
+
+        /* Priority badges */
+        .priority-high {
+            background: #e74c3c;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .priority-normal {
+            background: #f39c12;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button class="control-btn btn-print" onclick="printForm()">🖨️ In Phiếu</button>
+        <button class="control-btn btn-pdf" onclick="exportPDF()">📄 Xuất PDF</button>
+    </div>
+
+    <div class="a4-page" id="requestForm">
+        <div class="form-number">
+            <div>Số: <span class="number" id="formNumber"></span></div>
+            <div id="currentDate"></div>
+        </div>
+
+        <div class="company-header">
+            <div class="company-name">CÔNG TY TNHH CUNG CẤP NƯỚC SẠCH</div>
+            <div class="company-address">Địa chỉ: 123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh | ĐT: (028) 1234-5678</div>
+        </div>
+
+        <div class="main-title">
+            <h1>PHIẾU ĐỀ NGHỊ YÊU CẦU</h1>
+            <h2>Xử lý sự cố hệ thống đường ống</h2>
+        </div>
+
+        <!-- Thông tin cơ bản -->
+        <div class="form-section">
+            <div class="section-title">I. THÔNG TIN SỰ CỐ</div>
+            <div class="info-grid">
+                <div class="info-field">
+                    <div class="field-label">Ngày xảy ra:</div>
+                    <div class="field-value" id="incidentDate"></div>
+                </div>
+                <div class="info-field">
+                    <div class="field-label">Mức độ:</div>
+                    <div class="field-value">
+                        <span class="priority-high" id="priorityBadge">KHẨN CẤP</span>
+                    </div>
+                </div>
+                <div class="info-field">
+                    <div class="field-label">Phân loại:</div>
+                    <div class="field-value" id="incidentType"></div>
+                </div>
+                <div class="info-field">
+                    <div class="field-label">Mã sự cố:</div>
+                    <div class="field-value" id="incidentCode"></div>
+                </div>
+                <div class="info-field full-width-field">
+                    <div class="field-label">Vị trí xảy ra:</div>
+                    <div class="field-value" id="location"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thông số kỹ thuật -->
+        <div class="form-section">
+            <div class="section-title">II. THÔNG SỐ KỸ THUẬT</div>
+            <table class="tech-specs">
+                <tr>
+                    <th style="width: 25%">Loại đường ống</th>
+                    <th style="width: 25%">Đường kính</th>
+                    <th style="width: 25%">Áp lực vận hành</th>
+                    <th style="width: 25%">Năm lắp đặt</th>
+                </tr>
+                <tr>
+                    <td id="pipeType"></td>
+                    <td id="pipeDiameter"></td>
+                    <td id="pressure">3.5 - 4.0 bar</td>
+                    <td id="installYear">2018</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Mô tả chi tiết -->
+        <div class="form-section">
+            <div class="section-title">III. MÔ TẢ CHI TIẾT SỰ CỐ</div>
+            <div class="text-area description-area" id="description"></div>
+        </div>
+
+        <!-- Đề xuất giải pháp -->
+        <div class="form-section">
+            <div class="section-title">IV. ĐỀ XUẤT BIỆN PHÁP XỬ LÝ</div>
+            <div class="text-area solution-area" id="measures"></div>
+        </div>
+
+        <!-- Phần phê duyệt -->
+        <div class="approval-section">
+            <div class="section-title">V. PHÊ DUYỆT THỰC HIỆN</div>
+            <div class="approval-grid">
+                <div class="approval-box">
+                    <div class="approval-title">NGƯỜI ĐỀ NGHỊ</div>
+                    <div class="signature-line"></div>
+                    <div class="approval-note">(Ký tên, ghi rõ chức vụ)</div>
+                </div>
+                <div class="approval-box">
+                    <div class="approval-title">TRƯỞNG PHÒNG KỸ THUẬT</div>
+                    <div class="signature-line"></div>
+                    <div class="approval-note">(Ký tên, đóng dấu)</div>
+                </div>
+                <div class="approval-box">
+                    <div class="approval-title">GIÁM ĐỐC</div>
+                    <div class="signature-line"></div>
+                    <div class="approval-note">(Ký tên, đóng dấu)</div>
+                </div>
+            </div>
+            <div style="margin-top: 15px; font-size: 12px; color: #666;">
+                <strong>Ghi chú:</strong> Phiếu này có hiệu lực sau khi được Giám đốc ký duyệt và phải được thực hiện trong vòng 24 giờ.
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        // Lấy dữ liệu từ URL
+        function getFormData() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                incidentDate: params.get('ngay') || getCurrentDate(),
+                location: params.get('vitri') || '',
+                incidentType: params.get('phanloai') || '',
+                pipeType: params.get('loaiong') || '',
+                pipeDiameter: params.get('duongkinh') || '',
+                description: params.get('mota') || '',
+                measures: params.get('bienphap') || ''
+            };
+        }
+
+        // Lấy ngày hiện tại
+        function getCurrentDate() {
+            const now = new Date();
+            const day = now.getDate().toString().padStart(2, '0');
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const year = now.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        // Tạo số phiếu
+        function generateFormNumber() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = (now.getMonth() + 1).toString().padStart(2, '0');
+            const day = now.getDate().toString().padStart(2, '0');
+            const sequence = Math.floor(Math.random() * 999) + 1;
+            return `${sequence.toString().padStart(3, '0')}/ĐNXL-${day}${month}${year}`;
+        }
+
+        // Tạo mã sự cố
+        function generateIncidentCode() {
+            const types = ['SC', 'RL', 'TC', 'BH', 'KT'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            const number = Math.floor(Math.random() * 9999) + 1;
+            return `${type}-${number.toString().padStart(4, '0')}`;
+        }
+
+        // Xác định mức độ ưu tiên
+        function getPriority(incidentType) {
+            const highPriority = ['rò rỉ nghiêm trọng', 'vỡ ống', 'mất áp lực', 'ngập úng'];
+            const type = incidentType.toLowerCase();
+            
+            for (let priority of highPriority) {
+                if (type.includes(priority)) {
+                    return { text: 'KHẨN CẤP', class: 'priority-high' };
+                }
+            }
+            return { text: 'BÌNH THƯỜNG', class: 'priority-normal' };
+        }
+
+        // Điền dữ liệu vào form
+        function populateForm() {
+            const data = getFormData();
+            const now = new Date();
+            
+            // Thông tin cơ bản
+            document.getElementById('formNumber').textContent = generateFormNumber();
+            document.getElementById('currentDate').textContent = `Ngày ${getCurrentDate()}`;
+            document.getElementById('incidentDate').textContent = data.incidentDate;
+            document.getElementById('location').textContent = data.location;
+            document.getElementById('incidentType').textContent = data.incidentType;
+            document.getElementById('pipeType').textContent = data.pipeType;
+            document.getElementById('pipeDiameter').textContent = data.pipeDiameter;
+            document.getElementById('description').textContent = data.description;
+            document.getElementById('measures').textContent = data.measures;
+            document.getElementById('incidentCode').textContent = generateIncidentCode();
+            
+            // Xử lý mức độ ưu tiên
+            const priority = getPriority(data.incidentType);
+            const priorityBadge = document.getElementById('priorityBadge');
+            priorityBadge.textContent = priority.text;
+            priorityBadge.className = priority.class;
+        }
+
+        // In form
+        function printForm() {
+            window.print();
+        }
+
+        // Xuất PDF
+        function exportPDF() {
+            const element = document.getElementById('requestForm');
+            const formNum = document.getElementById('formNumber').textContent.replace(/\//g, '-');
+            
+            const options = {
+                margin: 0,
+                filename: `Phieu_De_Nghi_${formNum}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true,
+                    width: 794,
+                    height: 1123
+                },
+                jsPDF: {
+                    unit: 'px',
+                    format: [794, 1123],
+                    orientation: 'portrait'
+                }
+            };
+
+            html2pdf().set(options).from(element).save();
+        }
+
+        // Khởi tạo
+        document.addEventListener('DOMContentLoaded', populateForm);
+
+        // URL mẫu để test:
+        // ?ngay=17/08/2024&vitri=Số 456 Đường Võ Văn Tần, Phường 5, Quận 3, TP.HCM&phanloai=Rò rỉ nghiêm trọng&loaiong=Gang dẻo DN400&duongkinh=400mm&mota=Phát hiện vết nứt lớn trên thân ống cấp nước chính tại độ sâu 1.5m, nước rò rỉ với lưu lượng khoảng 50 lít/phút. Hiện tượng này đã gây giảm áp lực cung cấp nước cho khu vực rộng lớn, ảnh hưởng đến sinh hoạt của khoảng 2000 hộ dân. Nguyên nhân sơ bộ do ống đã hết tuổi thọ thiết kế và tác động từ công trình xây dựng lân cận.&bienphap=1. Cắt cung cấp nước khẩn cấp cho khu vực ảnh hưởng và thông báo cho người dân\n2. Huy động đội sửa chữa khẩn cấp đến hiện trường ngay lập tức\n3. Tiến hành đào hố để tiếp cận vị trí hư hỏng một cách an toàn\n4. Thay thế toàn bộ đoạn ống hư hỏng bằng ống HDPE PE100 DN400 mới\n5. Lắp đặt thêm van cắt để thuận tiện bảo dưỡng trong tương lai\n6. Kiểm tra chất lượng nước và thử áp sau khi hoàn thành\n7. Khôi phục cung cấp nước và theo dõi vận hành trong 48 giờ đầu
+    </script>
+</body>
+</html>
